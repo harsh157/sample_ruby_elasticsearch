@@ -11,7 +11,7 @@ class TestElasticSearchSample < MiniTest::Unit::TestCase
     req = Net::HTTP::Post.new('/index', initheader = { 'Content-Type' => 'application/json' })
     req.body = document.to_json
 
-    res = Net::HTTP.new('localhost', 4567).start { |http| http.request(req) }
+    res = Net::HTTP.new('localhost', 9200).start { |http| http.request(req) }
     assert res.code == "200"
 
     # Sleep for a few seconds to allow the document to get indexed
@@ -19,7 +19,7 @@ class TestElasticSearchSample < MiniTest::Unit::TestCase
   end
 
   def test_search()
-    uri = URI('http://localhost:4567/search?q=elasticsearch')
+    uri = URI('http://localhost:9200/search?q=elasticsearch')
     result = Net::HTTP.get(uri)
     result_json = JSON.parse result
     assert result_json["hits"]["total"] > 0
